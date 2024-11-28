@@ -19,39 +19,6 @@ const bottomRoutes = [
   { title: "Support", icon: "phone-volume", path: "/support" },
 ];
 
-const fadeInFromTop = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const fadeInFromBottom = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const fadeInFromRight = keyframes`
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-`;
-
 const Wrapper = styled.div`
   max-width: ${(props) => (props.$isOpened ? "220px" : "50px")};
   transition: max-width 0.3s ease-in-out;
@@ -77,9 +44,6 @@ const Logo = styled.img`
   width: 40px;
   height: 40px;
   padding-left: 4px;
-
-  animation: ${(props) => (props.$loadPage ? fadeInFromTop : "none")} 0.3s
-    ease-in-out;
 `;
 
 const WrapperLogo = styled.div`
@@ -101,9 +65,6 @@ const TextLogo = styled.span`
     props.$isOpened ? "translateX(0)" : "translateX(20px)"};
   opacity: ${(props) => (props.$isOpened ? 1 : 0)};
   transition: all 0.2s ease-in-out;
-
-  animation: ${(props) => (props.$loadPage ? fadeInFromTop : "none")} 0.3s
-    ease-in-out;
 `;
 
 const Button = styled.div`
@@ -130,13 +91,6 @@ const Button = styled.div`
         ? "var(--color-button-background-light-active)"
         : "var(--color-button-background-dark-active)"};
   }
-
-  opacity: 0;
-  visibility: ${(props) => (props.$loadPage ? "visible" : "hidden")};
-  animation: ${(props) => (props.$loadPage ? fadeInFromRight : "none")} 0.3s
-    ease-in-out;
-  animation-delay: 1.8s;
-  animation-fill-mode: forwards;
 `;
 
 const AllRoutes = styled.div`
@@ -188,19 +142,6 @@ const RouteLink = styled.div`
         : null};
   }
   transition: color 0.1s ease-in-out;
-
-  opacity: 0;
-  visibility: ${(props) => (props.$loadPage ? "visible" : "hidden")};
-
-  animation: ${(props) =>
-      props.$loadPage
-        ? props.$bottom
-          ? fadeInFromBottom
-          : fadeInFromTop
-        : "none"}
-    0.2s linear;
-  animation-delay: ${(props) => props.$index * 0.2}s;
-  animation-fill-mode: forwards;
 `;
 
 const RouteText = styled.span`
@@ -214,7 +155,6 @@ const Sidebar = (props) => {
   const { color } = props;
   const [isOpened, setIsOpened] = useState(true);
   const [activeRoute, setActiveRoute] = useState("");
-  const loadPage = true;
   const containerClassnames = classnames("sidebar", { opened: isOpened });
 
   const goToRoute = (path) => {
@@ -233,16 +173,11 @@ const Sidebar = (props) => {
       className={containerClassnames}
     >
       <WrapperLogo>
-        <Logo $loadPage={loadPage} src={logo} alt="TensorFlow logo" />
-        <TextLogo $color={color} $isOpened={isOpened} $loadPage={loadPage}>
+        <Logo src={logo} alt="TensorFlow logo" />
+        <TextLogo $color={color} $isOpened={isOpened}>
           TensorFlow
         </TextLogo>
-        <Button
-          $color={color}
-          $isOpened={isOpened}
-          $loadPage={loadPage}
-          onClick={toggleSidebar}
-        >
+        <Button $color={color} $isOpened={isOpened} onClick={toggleSidebar}>
           <FontAwesomeIcon icon={isOpened ? "angle-left" : "angle-right"} />
         </Button>
       </WrapperLogo>
@@ -256,7 +191,6 @@ const Sidebar = (props) => {
                 goToRoute(route.path);
               }}
               $active={activeRoute === route.path}
-              $loadPage={loadPage}
               $index={index + 1}
             >
               <FontAwesomeIcon icon={route.icon} />
@@ -274,7 +208,6 @@ const Sidebar = (props) => {
                 goToRoute(route.path);
               }}
               $active={activeRoute === route.path}
-              $loadPage={loadPage}
               $index={index + 6}
               $bottom
             >
